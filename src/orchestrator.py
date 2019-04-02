@@ -4,13 +4,13 @@
 import numpy as np
 
 class Orchestrator():
-  def __init__(self, d, l, g, R, z):
-    self.n_arms = len(n_arms) # number of arms
+  def __init__(self, n_arms, d, l, g, R, z):
+    self.n_arms = n_arms # number of arms
     self.d = d # size of the context vector
 
     # lambda, array of importances over objectives; for clarity, sums to one
-    # it has the same length as the policies list
-    if len(l) == 1:
+    # it has the same length as the number of arms
+    if n_arms == 2:
       self.l = np.asarray([l, 1-l])
     else:
       self.l = l
@@ -27,7 +27,7 @@ class Orchestrator():
     # c1 = features_extractor.feature1(state)
     # c2 = features_extractor.feature2(state)
     # return np.asarray([[c1, c2]]) # size (d, 1)
-    return np.ones(self.d, 1)
+    return np.ones((self.d, 1))
 
 
   def best_arm(self, state):
