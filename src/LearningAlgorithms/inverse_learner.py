@@ -112,7 +112,7 @@ class Inverse_Learner(abc.ABC):
 class My_Inverse_Learner(Inverse_Learner):
   def features(self, state, action):
     return state
-    
+
 
 if __name__ == '__main__':
   expert_traj = [np.random.uniform(-1, 1, 128), 
@@ -127,7 +127,7 @@ if __name__ == '__main__':
   epsilon = 0.9
   discount_factor = 0.8
 
-  irl.initialize_parameters(actions_arr, d, learning_rate, epsilon, discount_factor, num_matches=10, )
+  irl.initialize_parameters(actions_arr, d, learning_rate, epsilon, discount_factor, num_matches=10)
   
   for i in range(10):
     irl.update_parameters(actions_arr, d, learning_rate, epsilon, discount_factor, num_matches=10)
