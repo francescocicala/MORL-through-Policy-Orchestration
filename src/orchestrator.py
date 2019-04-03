@@ -24,10 +24,9 @@ class Orchestrator():
 
 
   def context(self, state):
-    # c1 = features_extractor.feature1(state)
-    # c2 = features_extractor.feature2(state)
-    # return np.asarray([[c1, c2]]) # size (d, 1)
-    return np.ones((self.d, 1))
+    c1 = features_extractor.feature1(state)
+    c2 = features_extractor.feature2(state)
+    return np.asarray([[c1, c2]]) # size (d, 1)
 
 
   def best_arm(self, state):
