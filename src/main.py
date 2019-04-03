@@ -2,55 +2,51 @@ from LearningAlgorithms.q_learner import Q_Learner
 import gym
 import numpy as np
 
-def play(agent, num_matches=10):
-  rewards = []
-  for i in range(num_matches):
-    print("Match {}\n".format(i))
-    env = gym.make('MsPacman-ram-v0')
-    state = env.reset() # initialize the environment
+def play(agent, training=False, verbose=True):
+  env = gym.make('MsPacman-ram-v0')
+  state = env.reset() # initialize the environment
 
-    rewards.append(0)
-    done = False
-    while(not done):
-      action = agent.best_action(state, training=False)
-      state, reward, done, _ = env.step(action)
-      rewards[i] += reward
+  score = 0
+  done = False
+  rounds = 0
+  while(not done):
+    action = agent.best_action(state, training=training)
 
-  return np.mean(rewards)
+    old_state = state
+    state, reward, done, _ = env.step(action)
+
+    if training:
+      agent.update_parameters(old_state, state, action, reward)
+
+    score += reward
+    rounds += 1
+
+  if verbose:
+    print("--> Game Over. Rounds: {} | Score: {}".format(rounds, score))
+
+  return rounds, score
+
+
+class My_Q_Learner(Q_Learner):
+  def features(self, state, action):
+    return state
 
 
 def main():
 
+  # initialization
   actions_arr = np.arange(9)
   d = 128
   learning_rate = 0.01
   epsilon = 0.9
   discount_factor = 0.8
 
-  agent = Q_Learner(actions_arr, d, learning_rate, epsilon, discount_factor)
-  
-  print("Noob agent playing...\n")
-  score = play(agent)
-  print("Finished! Score: {}".format(score))
+  agent = My_Q_Learner(actions_arr, d, learning_rate, epsilon, discount_factor)
 
   # Training loop
   num_matches = 10
   for i in range(num_matches):
-    env = gym.make('MsPacman-ram-v0')
-    state = env.reset() # initialize the environment
-
-    score = 0
-    done = False
-    while(not done):
-      action = agent.best_action(state, training=True)
-
-      old_state = state
-      state, reward, done, _ = env.step(action)
-
-      agent.update_parameters(old_state, state, action, reward)
-      score += reward
-      
-    print("Match {} completed. Score: {}".format(i, score))
+    play(agent, training=True, verbose=True)
   
   print("Training completed.\n")
 

@@ -1,9 +1,10 @@
 import numpy as np
+import abc
 
 def L2_normalization(vec):
   return vec / np.linalg.norm(vec)
 
-class Q_Learner():
+class Q_Learner(abc.ABC):
   """
   Q-learning agent for an environment where the set of possibile actions
   is finite.
@@ -16,7 +17,7 @@ class Q_Learner():
     self.discount_factor = discount_factor # discounting factor
 
     if theta == None:
-      self.theta = L2_normalization(np.ones(d))
+      self.theta = L2_normalization(np.random.normal(0, 0.1, d))
 
     elif len(theta) == d:
       self.theta = L2_normalization(d)
@@ -25,12 +26,9 @@ class Q_Learner():
       raise ValueError("theta length ({}) is different from d ({})".format(len(self.theta), d))
 
 
+  @abc.abstractmethod
   def features(self, state, action):
-    #f1 = features_extractor.feature1(state)
-    #f2 = features_extractor.feature2(state)
-    #f3 = features_extractor.feature3(state)
-    #return np.asarray([f1, f2, f3])
-    return state
+    pass
 
 
   def Q(self, state, action):
@@ -57,3 +55,8 @@ class Q_Learner():
     diff = self.difference(old_state, new_state, action, reward)
     self.theta += self.learning_rate * diff * self.features(old_state, action)
     self.theta = L2_normalization(self.theta) # some noise is added in this step 
+
+
+class My_Q_Learner(Q_Learner):
+  def features(self, state, action):
+    return state
