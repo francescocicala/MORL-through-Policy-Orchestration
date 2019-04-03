@@ -1,16 +1,17 @@
 # MORL-with-Policy-Orchestration
+Developing general multi-objective reinforcement learning methods which are compatible with OpenAI gym environments
 
-TO DO: 
+## To do:
  - [ ] In src/orchestrator.py add the value functions terms to the total_reward in self.update_beliefs(). You can approx it to the first order;
- - [ ] Test src/q_learner.py with the ram-vector;
+ - [x] Test src/q_learner.py with the ram-vector;
  - [ ] Build a policy by using Q_learner changing the reward for eating a ghost to negative. It will be the expert policy;
- - [ ] Collect a set of trajectories by means of the expert policy;
  - [x] Add a way to store weights to each learning algorithm in src/;
- - [ ] Build the inverse_learner class;
- - [ ] Define in Q_Learner the features method as abstract;
+ - [x] Build the inverse_learner class;
+ - [x] Define in Q_Learner the features method as abstract;
+ - [ ] Rewrite everything in a more abstract way and test it on GridWorld;
 
 ### Add a way to store weights to each learning algorithm in src/
-The easiest way is to save and load an object, whatever it is, by using:
+The easiest way is to save and load an object, whatever it is, is by using:
 
 ```{python}
 import pickle
