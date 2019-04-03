@@ -1,6 +1,3 @@
-# TO DO:
-#       - add value functions to total reward
-
 import numpy as np
 
 class Orchestrator():
