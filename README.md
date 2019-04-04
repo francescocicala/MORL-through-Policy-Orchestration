@@ -1,4 +1,4 @@
-# MORL-with-Policy-Orchestration
+# MORL through Policy Orchestration
 Developing general multi-objective reinforcement learning methods which are compatible with OpenAI gym environments
 
 ## To do:
