@@ -1,14 +1,7 @@
 import numpy as np
 import abc
 import gym
-
 from q_learner import Q_Learner
-
-
-class My_Q_Learner(Q_Learner):
-  def features(self, state, action):
-    return state
-
 
 
 class Inverse_Learner(abc.ABC):
@@ -27,8 +20,12 @@ class Inverse_Learner(abc.ABC):
     pass
 
 
-  def initialize_parameters(self, actions_arr, d, learning_rate, epsilon, disc_factor, num_matches=10):
+  @abc.abstractmethod
+  def environment(self):
+    pass
 
+
+  def initialize_parameters(self, actions_arr, d, learning_rate, epsilon, disc_factor, num_matches=10):
     if (len(self.feat_expectations) == 0 and len(self.feat_exp_proj) == 0):
       agent = My_Q_Learner(actions_arr, d, learning_rate, epsilon, disc_factor)
       agent = self.train_agent(agent, self.w, num_matches)
@@ -38,7 +35,6 @@ class Inverse_Learner(abc.ABC):
       self.feat_exp_proj.append(self.feat_expectations[0])
       self.w = self.f_expect_expert - self.feat_expectations[0]
       self.t.append(np.linalg.norm(self.w))
-
     else:
       raise Exception("self.feat_expectations and self.feat_exp_proj should be empty!")
 
@@ -61,17 +57,15 @@ class Inverse_Learner(abc.ABC):
     self.t.append(np.linalg.norm(self.w))
 
 
-    
-
   def compute_feat_expectations(self, trajectory):
     feat_expect = np.zeros(self.dim)
     for i in range(2, len(trajectory), 2):
       feat_expect = feat_expect + self.discount_factor ** ((i-2)/2) * self.features(trajectory[i-2], trajectory[i-1], trajectory[i])
-
     return feat_expect
 
+
   def train_agent(self, agent, weights=None, num_matches=10):
-    env = gym.make('MsPacman-ram-v0')
+    env = self.environment()
     state = env.reset() # initialize the environment
 
     if type(weights) == type(None):
@@ -82,34 +76,36 @@ class Inverse_Learner(abc.ABC):
       done = False
       while(not done):
         action = agent.best_action(state, training=True)
-
         old_state = state
         state, _, done, _ = env.step(action)
-
         reward = weights.dot(self.features(old_state, action, state))
         agent.update_parameters(old_state, state, action, reward)
-
     return agent
 
 
-
   def produce_trajectory(self, agent):
-    env = gym.make('MsPacman-ram-v0')
+    env = self.environment()
     state = env.reset() # initialize the environment
     trajectory = [state]
-
     done = False
     while(not done):
       action = agent.best_action(state, training=False)
       state, _, done, _ = env.step(action)
       trajectory.append(action)
       trajectory.append(state)
-
     return trajectory
 
 
 
 class My_Inverse_Learner(Inverse_Learner):
+  def features(self, state, action):
+    return state
+
+  def environment(self):
+    return gym.make('MsPacman-ram-v0')
+
+
+class My_Q_Learner(Q_Learner):
   def features(self, state, action):
     return state
 

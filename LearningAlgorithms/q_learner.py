@@ -31,17 +31,19 @@ class Q_Learner(abc.ABC):
     pass
 
 
+  @abc.abstractmethod
+  def environment(self):
+    pass
+
+
   def Q(self, state, action):
     return self.features(state, action).dot(self.theta)
 
 
   def best_action(self, state, training=False):
-
     u = np.random.uniform()
-
     if u > self.epsilon and training:
       return self.actions_arr[np.random.randint(len(self.actions_arr))]
-
     else:
       table = np.asarray([self.Q(state, action) for action in self.actions_arr])
       return self.actions_arr[np.argmax(table)]
