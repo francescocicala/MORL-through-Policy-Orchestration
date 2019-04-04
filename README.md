@@ -9,6 +9,8 @@ Developing general multi-objective reinforcement learning methods which are comp
  - [x] Build the inverse_learner class;
  - [x] Define in Q_Learner the features method as abstract;
  - [x] Test Q_Learner on CartPole;
+ - [x] Test Inverse_Learner on CartPole;
+ - [ ] Test the Orchestrator;
  - [ ] Add documentation;
 
 ### Add a way to store weights to each learning algorithm in src/
