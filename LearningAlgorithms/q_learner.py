@@ -31,11 +31,6 @@ class Q_Learner(abc.ABC):
     pass
 
 
-  @abc.abstractmethod
-  def environment(self):
-    pass
-
-
   def Q(self, state, action):
     return self.features(state, action).dot(self.theta)
 
