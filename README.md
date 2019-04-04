@@ -8,7 +8,8 @@ Developing general multi-objective reinforcement learning methods which are comp
  - [x] Add a way to store weights to each learning algorithm in src/;
  - [x] Build the inverse_learner class;
  - [x] Define in Q_Learner the features method as abstract;
- - [ ] Rewrite everything in a more abstract way and test it on GridWorld;
+ - [x] Test Q_Learner on CartPole;
+ - [ ] Add documentation;
 
 ### Add a way to store weights to each learning algorithm in src/
 The easiest way is to save and load an object, whatever it is, is by using:
